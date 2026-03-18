@@ -10,7 +10,6 @@ import sys
 CSV    = "results.csv"
 BINARY = ".\\quantumbook.exe"
 
-# ── run the C++ binary if csv missing ────────────────────────────────────────
 
 def run_cpp():
     print("results.csv not found — running C++ benchmark first...")
@@ -19,14 +18,12 @@ def run_cpp():
         print("benchmark binary failed — run .\\quantumbook.exe manually first")
         sys.exit(1)
 
-# ── load csv ──────────────────────────────────────────────────────────────────
 
 def load() -> pd.DataFrame:
     df = pd.read_csv(CSV)
     df["orders_K"] = (df["orders_sent"] / 1000).astype(int)
     return df
 
-# ── shared style ──────────────────────────────────────────────────────────────
 
 BLUE   = "#4C72B0"
 RED    = "#DD4444"
@@ -40,7 +37,6 @@ def style_ax(ax, title):
     ax.grid(axis="y", alpha=0.25, linestyle="--")
     ax.tick_params(labelsize=9)
 
-# ── panel 1 : throughput bar ──────────────────────────────────────────────────
 
 def plot_throughput(df, ax):
     bars = ax.bar(df["label"], df["throughput_kops"],
@@ -60,7 +56,7 @@ def plot_throughput(df, ax):
         mtick.FuncFormatter(lambda x, _: f"{x:,.0f}K"))
     style_ax(ax, "Throughput by batch size")
 
-# ── panel 2 : mean vs p99 latency ────────────────────────────────────────────
+
 
 def plot_latency(df, ax):
     x     = np.arange(len(df))
@@ -86,7 +82,7 @@ def plot_latency(df, ax):
     ax.legend(frameon=False, fontsize=9)
     style_ax(ax, "Matching latency  —  mean vs p99")
 
-# ── panel 3 : trades generated vs orders sent ─────────────────────────────────
+
 
 def plot_trades(df, ax):
     ax.plot(df["label"], df["orders_sent"]  / 1000,
@@ -112,7 +108,7 @@ def plot_trades(df, ax):
     ax.legend(frameon=False, fontsize=9)
     style_ax(ax, "Orders sent vs trades generated")
 
-# ── panel 4 : wall time scaling ───────────────────────────────────────────────
+
 
 def plot_walltime(df, ax):
     ax.plot(df["orders_K"], df["elapsed_ms"],
@@ -136,7 +132,6 @@ def plot_walltime(df, ax):
     ax.legend(frameon=False, fontsize=9)
     style_ax(ax, "Wall time vs batch size  (linear scaling)")
 
-# ── summary table panel ───────────────────────────────────────────────────────
 
 def print_summary(df):
     print("\n" + "="*64)
@@ -152,7 +147,7 @@ def print_summary(df):
               f" {pct:>8.1f}%")
     print("="*64 + "\n")
 
-# ── assemble dashboard ────────────────────────────────────────────────────────
+
 
 def plot_dashboard(df):
     fig, axes = plt.subplots(2, 2, figsize=(13, 8))
@@ -171,7 +166,7 @@ def plot_dashboard(df):
     print(f"dashboard saved -> {out}")
     plt.show()
 
-# ── entry point ───────────────────────────────────────────────────────────────
+
 
 if __name__ == "__main__":
     if not os.path.exists(CSV):

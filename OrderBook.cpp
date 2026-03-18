@@ -8,7 +8,6 @@ void OrderBook::add_order(Order order) {
         // market orders never rest on the book
         return;
     }
-    // limit order: try to match first, then rest any remainder
     match_limit(order);
 
     if (order.remaining > 0) {
@@ -24,7 +23,6 @@ void OrderBook::add_order(Order order) {
 
 void OrderBook::match_limit(Order& incoming) {
     if (incoming.side == Side::BUY) {
-        // sweep asks from lowest price upward, stop when no more crosses
         while (incoming.remaining > 0 && !asks_.empty()) {
             auto it = asks_.begin();           // best ask (lowest)
             if (it->first > incoming.price)    // no cross — done
@@ -37,7 +35,7 @@ void OrderBook::match_limit(Order& incoming) {
                 uint32_t fill = std::min(incoming.remaining, resting.remaining);
 
                 Trade t{ incoming.order_id, resting.order_id,
-                         resting.price,    // fill at resting order's price
+                         resting.price,   
                          fill };
                 on_trade_(t);
 
@@ -48,10 +46,9 @@ void OrderBook::match_limit(Order& incoming) {
                     queue.pop_front();
             }
             if (queue.empty())
-                asks_.erase(it);    // price level exhausted — remove it
+                asks_.erase(it);    
         }
     } else {
-        // SELL: sweep bids from highest price downward
         while (incoming.remaining > 0 && !bids_.empty()) {
             auto it = bids_.begin();           // best bid (highest)
             if (it->first < incoming.price)    // no cross — done
@@ -85,8 +82,6 @@ void OrderBook::match_limit(Order& incoming) {
 
 
 void OrderBook::match_market(Order& incoming) {
-    // market orders are identical to limit match but with no price check —
-    // they sweep until filled or the book is empty
     if (incoming.side == Side::BUY) {
         while (incoming.remaining > 0 && !asks_.empty()) {
             auto it    = asks_.begin();
@@ -123,7 +118,6 @@ void OrderBook::match_market(Order& incoming) {
             }
             if (queue.empty()) bids_.erase(it);
         }
-        // any remaining quantity is simply dropped — market orders never rest
     }
 }
 
@@ -161,7 +155,6 @@ bool OrderBook::cancel_ask(uint64_t order_id, double price) {
     }
     return false;
 }
-// add these to the bottom of OrderBook.cpp if missing
 
 double OrderBook::best_bid() const {
     return bids_.empty() ? 0.0 : bids_.begin()->first;
@@ -173,14 +166,11 @@ double OrderBook::best_ask() const {
 
 /*
 
----
 
 ## What we have so far
 
-The matching engine is complete and correct. The full execution path for any order is:
-```
 add_order()
-  ├── MARKET → match_market() → done (never rests)
-  └── LIMIT  → match_limit() → if remaining > 0 → rest on book
+  ├ MARKET → match_market() → done (never rests)
+  └ LIMIT  → match_limit() → if remaining > 0 → rest on book
 
 */

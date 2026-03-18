@@ -17,14 +17,13 @@ class RingBuffer {
 
 public:
     RingBuffer() : head_(0), tail_(0),
-                   slots_(new Order[Capacity])   // heap allocation
+                   slots_(new Order[Capacity])   
     {}
 
     ~RingBuffer() {
         delete[] slots_;
     }
 
-    // non-copyable
     RingBuffer(const RingBuffer&)            = delete;
     RingBuffer& operator=(const RingBuffer&) = delete;
 
@@ -62,5 +61,5 @@ private:
     alignas(64) std::atomic<std::size_t> head_;
     alignas(64) std::atomic<std::size_t> tail_;
 
-    Order* slots_;   // heap pointer — no stack pressure
+    Order* slots_;   
 };

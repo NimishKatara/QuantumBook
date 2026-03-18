@@ -8,7 +8,7 @@
 #include <chrono>
 #include <string>
 
-// ── order generation ──────────────────────────────────────────────────────────
+//  order generation 
 
 struct OrderGen {
     std::mt19937_64                  rng;
@@ -36,7 +36,7 @@ struct OrderGen {
     }
 };
 
-// ── benchmark result ──────────────────────────────────────────────────────────
+//  benchmark result 
 
 struct BenchResult {
     uint64_t orders_sent;
@@ -48,7 +48,7 @@ struct BenchResult {
     double   elapsed_ms;
 };
 
-// ── benchmark runner ──────────────────────────────────────────────────────────
+// benchmark runner 
 
 BenchResult run_benchmark(uint64_t num_orders) {
     Engine   engine;
@@ -73,7 +73,7 @@ BenchResult run_benchmark(uint64_t num_orders) {
              s.throughput_ops, elapsed };
 }
 
-// ── pretty printer ────────────────────────────────────────────────────────────
+//pretty printer 
 
 void print_result(const std::string& label, const BenchResult& r) {
     std::cout << "\n+-- " << label << "\n"
@@ -89,8 +89,7 @@ void print_result(const std::string& label, const BenchResult& r) {
               << "+---------------------------------------------\n";
 }
 
-// ── csv export ────────────────────────────────────────────────────────────────
-
+// csv export 
 void write_csv(const std::vector<std::pair<std::string, BenchResult>>& runs) {
     std::ofstream f("results.csv");
     f << "label,orders_sent,orders_processed,trades,mean_ns,p99_ns,"
@@ -111,7 +110,7 @@ void write_csv(const std::vector<std::pair<std::string, BenchResult>>& runs) {
     std::cout << "\nresults written to results.csv\n";
 }
 
-// ── main ──────────────────────────────────────────────────────────────────────
+//  main 
 
 int main() {
     std::cout << "QuantumBook - Low Latency Order Matching Benchmark\n"

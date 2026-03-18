@@ -17,7 +17,6 @@ using TradeCallback = std::function<void(const Trade&)>;
 
 class OrderBook {
 public:
-    // no-op default — lets Engine rebind callback after construction
     OrderBook() : on_trade_([](const Trade&){}) {}
 
     explicit OrderBook(TradeCallback cb) : on_trade_(std::move(cb)) {}

@@ -1,4 +1,3 @@
-// test_thread.cpp  — paste this as a brand new file, do NOT modify anything else
 #include <windows.h>
 #include <iostream>
 #include <atomic>

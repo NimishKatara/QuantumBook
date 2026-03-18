@@ -4,7 +4,6 @@ project(QuantumBook CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Release build flags — critical for latency numbers
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -funroll-loops -DNDEBUG")
 
 add_executable(quantumbook

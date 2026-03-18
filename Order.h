@@ -14,7 +14,7 @@ struct Order {
     Side      side;
     OrderType type;
 
-    // default constructor — required by std::array inside RingBuffer
+    
     Order()
         : order_id(0), timestamp(0), price(0.0),
           quantity(0), remaining(0),

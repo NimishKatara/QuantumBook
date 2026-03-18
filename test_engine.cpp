@@ -4,7 +4,6 @@
 #include <atomic>
 #include <functional>
 
-// ── paste minimal stubs so we don't drag in the whole project ─────────────────
 
 #include "Order.h"
 #include "RingBuffer.h"

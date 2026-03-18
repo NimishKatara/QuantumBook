@@ -24,7 +24,6 @@ constexpr std::size_t RING_CAPACITY = 1 << 16;
 class Engine {
 public:
     Engine() : book_(nullptr), running_(false), thread_handle_(nullptr) {
-        // construct on heap AFTER 'this' exists — no capture timing issue
         book_ = new OrderBook([this](const Trade& t){ on_trade(t); });
     }
 
